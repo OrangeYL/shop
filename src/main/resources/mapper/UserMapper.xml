@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orange.shop.mapper.UserMapper">
+    <!--实体类与数据库映射字段部分-->
+    <resultMap id="BaseResultMap" type="com.orange.shop.entity.User">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userName" column="userName" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="realName" column="realName" jdbcType="VARCHAR"/>
+        <result property="sex" column="sex" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 声明数据库字段 -->
+    <sql id="User_field">
+        id,userName,password,phone,realName,sex,address,email
+    </sql>
+
+    <!-- 实体类属性-->
+    <sql id="User_insert">
+        #{id},#{userName},#{password},#{phone},#{realName},#{sex},#{address},#{email}
+    </sql>
+
+
+    <!-- 更新结果  -->
+    <sql id="User_update">
+        <if test="userName != null">
+            userName = #{userName},
+        </if>
+        <if test="password != null">
+            password = #{password},
+        </if>
+        <if test="phone != null">
+            phone = #{phone},
+        </if>
+        <if test="realName != null">
+            realName = #{realName},
+        </if>
+        <if test="sex != null">
+            sex = #{sex},
+        </if>
+        <if test="address != null">
+            address = #{address},
+        </if>
+        <if test="email != null">
+            email = #{email}
+        </if>
+
+    </sql>
+
+    <!-- 查询时条件   -->
+    <sql id="User_where">
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="userName != null">
+            and userName like CONCAT('%',#{userName},'%')
+        </if>
+        <if test="password != null">
+            and password = #{password}
+        </if>
+        <if test="phone != null">
+            and phone = #{phone}
+        </if>
+        <if test="realName != null">
+            and realName = #{realName}
+        </if>
+        <if test="sex != null">
+            and sex = #{sex}
+        </if>
+        <if test="address != null">
+            and address = #{address}
+        </if>
+        <if test="email != null">
+            and email = #{email}
+        </if>
+    </sql>
+    <!--    新增        -->
+    <!--    参数：实体类-->
+    <!--    返回：主键 -->
+    <insert id="insert" parameterType="com.orange.shop.entity.User" useGeneratedKeys="true" keyProperty="id">
+        insert into user(
+        <include refid="User_field"/>
+        ) values(
+        <include refid="User_insert"/>
+        )
+    </insert>
+
+    <!-- 通过id进行修改-->
+    <update id="updateById" parameterType="com.orange.shop.entity.User">
+        update user
+        <set>
+            <include refid="User_update"/>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!-- 根据主键获取一个实体-->
+    <select id="load" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select <include refid="User_field"/>
+        from user where id=#{id}
+    </select>
+
+    <!--通过对象查询-不分页-->
+    <select id="getByEntity" resultMap="BaseResultMap" parameterType="com.orange.shop.entity.User">
+        select <include refid="User_field"/>
+        from user where 1=1
+        <include refid="User_where"/>
+    </select>
+
+    <!--通过对象查询分页-->
+    <select id="findByEntity" resultMap="BaseResultMap" parameterType="com.orange.shop.entity.User">
+        select <include refid="User_field"/>
+        from user where 1=1
+        <include refid="User_where"/>
+    </select>
+</mapper>

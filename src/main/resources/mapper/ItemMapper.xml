@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orange.shop.mapper.ItemMapper">
+    <!--实体类与数据库映射字段部分-->
+    <resultMap id="ResultMapItem" type="com.orange.shop.entity.Item">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="FLOAT"/>
+        <result property="discount" column="discount" jdbcType="INTEGER"/>
+        <result property="collectNum" column="collectNum" jdbcType="INTEGER"/>
+        <result property="buyNum" column="buyNum" jdbcType="INTEGER"/>
+        <result property="url1" column="url1" jdbcType="VARCHAR"/>
+        <result property="url2" column="url2" jdbcType="VARCHAR"/>
+        <result property="url3" column="url3" jdbcType="VARCHAR"/>
+        <result property="url4" column="url4" jdbcType="VARCHAR"/>
+        <result property="url5" column="url5" jdbcType="VARCHAR"/>
+        <result property="des" column="des" jdbcType="VARCHAR"/>
+        <result property="pam1" column="pam1" jdbcType="VARCHAR"/>
+        <result property="pam2" column="pam2" jdbcType="VARCHAR"/>
+        <result property="pam3" column="pam3" jdbcType="VARCHAR"/>
+        <result property="val1" column="val1" jdbcType="VARCHAR"/>
+        <result property="val2" column="val2" jdbcType="VARCHAR"/>
+        <result property="val3" column="val3" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="INTEGER"/>
+        <result property="categoryIdOne" column="category_id_one" jdbcType="INTEGER"/>
+        <result property="categoryIdTwo" column="category_id_two" jdbcType="INTEGER"/>
+        <result property="isDelete" column="isDelete" jdbcType="INTEGER"/>
+        <association property="parent" column="category_id_one" select="com.orange.shop.mapper.ItemCategoryMapper.load"/>
+        <association property="sub" column="category_id_two" select="com.orange.shop.mapper.ItemCategoryMapper.load"/>
+        <collection property="appraise" column="id" ofType="com.orange.shop.entity.Comment" select="com.orange.shop.mapper.CommentMapper.listByItemId"/>
+    </resultMap>
+
+    <!-- 声明数据库字段 -->
+    <sql id="Item_field">
+        id,name,price,discount,collectNum,buyNum,url1,url2,url3,url4,url5,des,pam1,pam2,pam3,val1,val2,val3,type,category_id_one,category_id_two,isDelete
+    </sql>
+
+    <!-- 实体类属性-->
+    <sql id="Item_insert">
+        #{id},#{name},#{price},#{discount},#{collectNum},#{buyNum},#{url1},#{url2},#{url3},#{url4},#{url5},#{des},#{pam1},#{pam2},#{pam3},
+        #{val1},#{val2},#{val3},#{type},#{categoryIdOne},#{categoryIdTwo},#{isDelete}
+    </sql>
+
+    <!-- 更新结果  -->
+    <sql id="Item_update">
+        <if test="name != null">
+            name = #{name},
+        </if>
+        <if test="price != null">
+            price = #{price},
+        </if>
+        <if test="discount != null">
+            discount = #{discount},
+        </if>
+        <if test="collectNum != null">
+            collectNum = #{collectNum},
+        </if>
+        <if test="buyNum != null">
+            buyNum = #{buyNum},
+        </if>
+        <if test="url1 != null">
+            url1 = #{url1},
+        </if>
+        <if test="url2 != null">
+            url2 = #{url2},
+        </if>
+        <if test="url3 != null">
+            url3 = #{url3},
+        </if>
+        <if test="url4 != null">
+            url4 = #{url4},
+        </if>
+        <if test="url5 != null">
+            url5 = #{url5},
+        </if>
+        <if test="des != null">
+            des = #{des},
+        </if>
+        <if test="pam1 != null">
+            pam1 = #{pam1},
+        </if>
+        <if test="pam2 != null">
+            pam2 = #{pam2},
+        </if>
+        <if test="pam3 != null">
+            pam3 = #{pam3},
+        </if>
+        <if test="val1 != null">
+            val1 = #{val1},
+        </if>
+        <if test="val2 != null">
+            val2 = #{val2},
+        </if>
+        <if test="val3 != null">
+            val3 = #{val3},
+        </if>
+        <if test="type != null">
+            type = #{type},
+        </if>
+        <if test="categoryIdOne != null">
+            category_id_one = #{categoryIdOne},
+        </if>
+        <if test="categoryIdTwo != null">
+            category_id_two = #{categoryIdTwo},
+        </if>
+        <if test="isDelete != null">
+            isDelete = #{isDelete}
+        </if>
+    </sql>
+
+    <!-- 查询时条件   -->
+    <sql id="Item_where">
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="name != null">
+            and name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="price != null">
+            and price = #{price}
+        </if>
+        <if test="discount != null">
+            and discount = #{discount}
+        </if>
+        <if test="collectNum != null">
+            and collectNum = #{collectNum}
+        </if>
+        <if test="buyNum != null">
+            and buyNum = #{buyNum}
+        </if>
+        <if test="url1 != null">
+            and url1 = #{url1}
+        </if>
+        <if test="url2 != null">
+            and url2 = #{url2}
+        </if>
+        <if test="url3 != null">
+            and url3 = #{url3}
+        </if>
+        <if test="url4 != null">
+            and url4 = #{url4}
+        </if>
+        <if test="url5 != null">
+            and url5 = #{url5}
+        </if>
+        <if test="des != null">
+            and des = #{des}
+        </if>
+        <if test="pam1 != null">
+            and pam1 = #{pam1}
+        </if>
+        <if test="pam2 != null">
+            and pam2 = #{pam2}
+        </if>
+        <if test="pam3 != null">
+            and pam3 = #{pam3}
+        </if>
+        <if test="val1 != null">
+            and val1 = #{val1}
+        </if>
+        <if test="val2 != null">
+            and val2 = #{val2}
+        </if>
+        <if test="val3 != null">
+            and val3 = #{val3}
+        </if>
+        <if test="type != null">
+            and type = #{type}
+        </if>
+        <if test="categoryIdOne != null">
+            and category_id_one = #{categoryIdOne}
+        </if>
+        <if test="categoryIdTwo != null">
+            and category_id_two = #{categoryIdTwo}
+        </if>
+        <if test="isDelete != null">
+            and isDelete = #{isDelete}
+        </if>
+    </sql>
+
+    <!--    新增        -->
+    <!--    参数：实体类-->
+    <!--    返回：主键 -->
+    <insert id="insert" parameterType="com.orange.shop.entity.Item" useGeneratedKeys="true" keyProperty="id">
+        insert into item(
+        <include refid="Item_field"/>
+        ) values(
+        <include refid="Item_insert"/>
+        )
+    </insert>
+
+    <!-- 通过id进行修改-->
+    <update id="updateById" parameterType="com.orange.shop.entity.Item">
+        update item
+        <set>
+            <include refid="Item_update"/>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!-- 根据主键获取一个实体-->
+    <select id="load" resultMap="ResultMapItem" parameterType="java.lang.Integer">
+        select <include refid="Item_field"/>
+        from item where id=#{id}
+    </select>
+
+    <!--通过对象查询-不分页-->
+    <select id="getByEntity" resultMap="ResultMapItem" parameterType="com.orange.shop.entity.Item">
+        select <include refid="Item_field"/>
+        from item where 1=1
+        <include refid="Item_where"/>
+    </select>
+
+    <!--通过对象查询分页-->
+    <select id="findByEntity" resultMap="ResultMapItem" parameterType="com.orange.shop.entity.Item">
+        select
+        <include refid="Item_field"/>
+        from item where 1=1
+        <include refid="Item_where"/>
+        and isDelete=0 order by id desc
+    </select>
+
+<!--    查询折扣商品-->
+    <select id="queryDiscountItem" resultMap="ResultMapItem">
+        select <include refid="Item_field"/>
+        from item
+        where isDelete = 0
+        and discount is not null
+        order by discount desc limit 0,10
+    </select>
+
+<!--    查询热销产品-->
+    <select id="queryHotSellItem" resultMap="ResultMapItem">
+        select <include refid="Item_field"/>
+        from item
+        where isDelete = 0
+        order by buyNum desc limit 0,10
+    </select>
+
+    <select id="querySubOrKey" resultMap="ResultMapItem">
+        select <include refid="Item_field"/>
+        from item
+        where isDelete=0
+        <if test="item.categoryIdTwo != null">
+            and category_id_two = #{item.categoryIdTwo}
+        </if>
+        <if test="condition!=null">
+            and name like concat('%',#{condition},'%')
+        </if>
+        <if test="item.buyNum!=null">
+            order by buyNum desc
+        </if>
+        <if test="item.price!=null">
+            order by price desc
+        </if>
+        <if test="item.buyNum==null and item.price==null">
+            order by id desc
+        </if>
+    </select>
+</mapper>

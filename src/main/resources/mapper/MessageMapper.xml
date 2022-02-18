@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orange.shop.mapper.MessageMapper">
+    <!--实体类与数据库映射字段部分-->
+    <resultMap id="BaseResultMap" type="com.orange.shop.entity.Message">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 声明数据库字段 -->
+    <sql id="Message_field">
+        id,name,content,phone
+    </sql>
+
+    <!-- 实体类属性-->
+    <sql id="Message_insert">
+        #{id},#{name},#{content},#{phone}
+    </sql>
+
+    <!-- 更新结果  -->
+    <sql id="Message_update">
+        <if test="name != null">
+            name = #{name},
+        </if>
+        <if test="content != null">
+            content = #{content},
+        </if>
+        <if test="phone != null">
+            phone = #{phone}
+        </if>
+    </sql>
+
+    <!-- 查询时条件   -->
+    <sql id="Message_where">
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="name != null">
+            and name like concat('%',#{name},'%')
+        </if>
+        <if test="content != null">
+            and content = #{content}
+        </if>
+        <if test="phone != null">
+            and phone = #{phone}
+        </if>
+    </sql>
+
+    <!--    新增        -->
+    <!--    参数：实体类-->
+    <!--    返回：主键 -->
+    <insert id="insert" parameterType="com.orange.shop.entity.Message" useGeneratedKeys="true" keyProperty="id">
+        insert into message(
+        <include refid="Message_field"/>
+        ) values(
+        <include refid="Message_insert"/>
+        )
+    </insert>
+
+    <!-- 通过id进行修改-->
+    <update id="updateById" parameterType="com.orange.shop.entity.Message">
+        update message
+        <set>
+            <include refid="Message_update"/>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Integer">
+        delete from message where id=#{id}
+    </delete>
+
+    <!-- 根据主键获取一个实体-->
+    <select id="load" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select <include refid="Message_field"/>
+        from message where id=#{id}
+    </select>
+
+    <!--通过对象查询-不分页-->
+    <select id="getByEntity" resultMap="BaseResultMap" parameterType="com.orange.shop.entity.Message">
+        select <include refid="Message_field"/>
+        from message where 1=1
+        <include refid="Message_where"/>
+    </select>
+
+    <!--通过对象查询分页-->
+    <select id="findByEntity" resultMap="BaseResultMap" parameterType="com.orange.shop.entity.Message">
+        select
+        <include refid="Message_field"/>
+        from message where 1=1
+        <include refid="Message_where"/>
+        order by id desc
+    </select>
+</mapper>

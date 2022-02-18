@@ -1,0 +1,39 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: shop
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/shop?serverTimezone=UTC
+    username: root
+    password: 123456789
+    type: com.alibaba.druid.pool.DruidDataSource
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp
+      suffix: .jsp
+    static-path-pattern: /static/**
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+mybatis:
+  type-aliases-package: com.orange.shop.mybatis.entity
+  mapper-locations: classpath:mapper/*.xml
+
+pagehelper:
+  reasonable: true
+  params: count=countSql
+  support-methods-arguments: true
+  helper-dialect: mysql
+
+logging:
+  level:
+   com.orange.shop.mapper: debug
+
+
+

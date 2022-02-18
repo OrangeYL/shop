@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orange.shop.mapper.CarMapper">
+    <!--实体类与数据库映射字段部分-->
+    <resultMap id="BaseResultMap" type="com.orange.shop.entity.Car">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="itemId" column="item_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="num" column="num" jdbcType="INTEGER"/>
+        <result property="price" column="price" jdbcType="FLOAT"/>
+        <result property="total" column="total" jdbcType="FLOAT"/>
+    </resultMap>
+
+    <resultMap id="BaseResultDto" type="com.orange.shop.entity.Car">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="itemId" column="item_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="num" column="num" jdbcType="INTEGER"/>
+        <result property="price" column="price" jdbcType="FLOAT"/>
+        <result property="total" column="total" jdbcType="FLOAT"/>
+        <association property="item" column="item_id" select="com.orange.shop.mapper.ItemMapper.load"/>
+    </resultMap>
+
+    <!-- 声明数据库字段 -->
+    <sql id="Car_field">
+        id,item_id,user_id,num,price,total
+    </sql>
+
+    <!-- 实体类属性-->
+    <sql id="Car_insert">
+        #{id},#{itemId},#{userId},#{num},#{price},#{total}
+    </sql>
+
+    <!-- 更新结果  -->
+    <sql id="Car_update">
+        <if test="itemId != null">
+            item_id = #{itemId},
+        </if>
+        <if test="userId != null">
+            user_id = #{userId},
+        </if>
+        <if test="num != null">
+            num = #{num},
+        </if>
+        <if test="price != null">
+            price = #{price},
+        </if>
+        <if test="total != null">
+            total = #{total},
+        </if>
+
+    </sql>
+
+    <!-- 查询时条件   -->
+    <sql id="Car_where">
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="itemId != null">
+            and item_id = #{itemId}
+        </if>
+        <if test="userId != null">
+            and user_id = #{userId}
+        </if>
+        <if test="num != null">
+            and num = #{num}
+        </if>
+        <if test="price != null">
+            and price = #{price}
+        </if>
+        <if test="total != null">
+            and total = #{total}
+        </if>
+    </sql>
+
+    <!--    新增        -->
+    <!--    参数：实体类-->
+    <!--    返回：主键 -->
+    <insert id="insert" parameterType="com.orange.shop.entity.Car" useGeneratedKeys="true" keyProperty="id">
+        insert into car(
+        <include refid="Car_field"/>
+        ) values(
+        <include refid="Car_insert"/>
+        )
+    </insert>
+
+    <!-- 根据实体主键删除一个实体-->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from car where id=#{id}
+    </delete>
+
+    <!-- 通过id进行修改-->
+    <update id="updateById" parameterType="com.orange.shop.entity.Car">
+        update car
+        <set>
+            <include refid="Car_update"/>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!-- 根据主键获取一个实体-->
+    <select id="load" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select <include refid="Car_field"/>
+        from car where id=#{id}
+    </select>
+
+    <!--通过对象查询-不分页-->
+    <select id="getByEntity" resultMap="BaseResultMap" parameterType="com.orange.shop.entity.Car">
+        select <include refid="Car_field"/>
+        from car where 1=1
+        <include refid="Car_where"/>
+    </select>
+
+    <!--通过对象查询分页-->
+    <select id="findByEntity" resultMap="BaseResultDto" parameterType="com.orange.shop.entity.Car">
+        select <include refid="Car_field"/>
+        from car where 1=1
+        <include refid="Car_where"/>
+        order by id desc
+    </select>
+</mapper>
